@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import { 
   Star, 
   Smartphone, 
@@ -22,12 +23,15 @@ import {
   Coffee,
   Building2,
   Menu,
-  X
+  X,
+  Loader2
 } from 'lucide-react';
 
 const MoroccanTemplatesLanding = () => {
   const [activeTemplate, setActiveTemplate] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -37,12 +41,25 @@ const MoroccanTemplatesLanding = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // EmailJS Configuration
+  const EMAILJS_CONFIG = {
+    SERVICE_ID: 'service_9lql4b9',
+    TEMPLATE_ID: 'template_n4sxosj',
+    PUBLIC_KEY: 'aeH3McVuDGTzM_GVv'
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Initialize EmailJS
+  useEffect(() => {
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    console.log('EmailJS initialized with public key:', EMAILJS_CONFIG.PUBLIC_KEY);
   }, []);
 
   const handleFormChange = (e) => {
@@ -52,12 +69,69 @@ const MoroccanTemplatesLanding = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('شكرا ليك! غانكونطاكتيوك قريبا');
-    setShowPopup(false);
-    setFormData({ name: '', email: '', phone: '', businessDescription: '' });
+    setIsSubmitting(true);
+    setSubmitStatus('');
+
+    try {
+      // Prepare template parameters
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        business_description: formData.businessDescription,
+        to_email: 'hmweb77@gmail.com',
+        current_date: new Date().toLocaleDateString('ar-EG', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      };
+
+      console.log('Sending email with params:', templateParams);
+      console.log('Using EmailJS config:', {
+        service: EMAILJS_CONFIG.SERVICE_ID,
+        template: EMAILJS_CONFIG.TEMPLATE_ID
+      });
+
+      // Send email using EmailJS
+      const response = await emailjs.send(
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
+        templateParams
+      );
+
+      console.log('EmailJS Success:', response);
+
+      if (response.status === 200) {
+        setSubmitStatus('success');
+        setFormData({ name: '', email: '', phone: '', businessDescription: '' });
+        alert('✅ شكرا ليك! تم إرسال الطلب بنجاح. غانكونطاكتيوك قريبا إن شاء الله 📱');
+        
+        setTimeout(() => {
+          setShowPopup(false);
+          setSubmitStatus('');
+        }, 2000);
+      }
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setSubmitStatus('error');
+      
+      let errorMessage = 'حدث خطأ في إرسال الطلب. حاول مرة أخرى أو كونطاكتينا مباشرة';
+      
+      if (error.status === 422) {
+        errorMessage = 'خطأ في إعدادات البريد الإلكتروني. تأكد من صحة المعلومات';
+      } else if (error.status === 400) {
+        errorMessage = 'خطأ في البيانات المرسلة. تأكد من ملء جميع الحقول بشكل صحيح';
+      }
+      
+      alert(`❌ ${errorMessage}`);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const scrollToSection = (id) => {
@@ -560,7 +634,7 @@ const MoroccanTemplatesLanding = () => {
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-2">واتساب</h3>
                 <p className="text-gray-600 text-sm sm:text-base">سولنا مباشرة</p>
-                <p className="text-amber-600 font-semibold text-sm sm:text-base">+212 6XX XXX XXX</p>
+                <p className="text-amber-600 font-semibold text-sm sm:text-base">+212660059899</p>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="p-4 sm:p-6">
@@ -656,7 +730,8 @@ const MoroccanTemplatesLanding = () => {
                   value={formData.name}
                   onChange={handleFormChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base"
+                  disabled={isSubmitting}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="دخل السمية ديالك هنا"
                 />
               </div>
@@ -669,7 +744,8 @@ const MoroccanTemplatesLanding = () => {
                   value={formData.email}
                   onChange={handleFormChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base"
+                  disabled={isSubmitting}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="example@gmail.com"
                 />
               </div>
@@ -682,7 +758,8 @@ const MoroccanTemplatesLanding = () => {
                   value={formData.phone}
                   onChange={handleFormChange}
                   required
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base"
+                  disabled={isSubmitting}
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="+212 6XX XXX XXX"
                 />
               </div>
@@ -694,28 +771,56 @@ const MoroccanTemplatesLanding = () => {
                   value={formData.businessDescription}
                   onChange={handleFormChange}
                   required
+                  disabled={isSubmitting}
                   rows="4"
-                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none text-sm sm:text-base"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
                   placeholder="قول لينا شنو كاتدير في البيزنس ديالك... مدرسة، فندق، مطعم، أو خدمة أخرى"
                 />
               </div>
 
               <div className="flex gap-3 sm:gap-4 mt-4 sm:mt-6">
-       
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-amber-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-amber-700 hover:to-orange-700 transition-all duration-300 transform hover:scale-105"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-gradient-to-r from-amber-600 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-amber-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
                 >
-                  صيفط الطلب
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      جاري الإرسال...
+                    </>
+                  ) : (
+                    'صيفط الطلب'
+                  )}
                 </button>
                 <button
                   type="button"
                   onClick={() => setShowPopup(false)}
-                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300"
+                  disabled={isSubmitting}
+                  className="flex-1 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   إلغاء
                 </button>
               </div>
+
+              {/* Status Messages */}
+              {submitStatus === 'success' && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-green-800">
+                    <CheckCircle className="w-4 h-4" />
+                    <span className="text-sm font-medium">تم إرسال الطلب بنجاح!</span>
+                  </div>
+                </div>
+              )}
+              
+              {submitStatus === 'error' && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-red-800">
+                    <X className="w-4 h-4" />
+                    <span className="text-sm font-medium">حدث خطأ. حاول مرة أخرى</span>
+                  </div>
+                </div>
+              )}
             </form>
 
             <div className="mt-6 text-center text-sm text-gray-500">
