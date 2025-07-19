@@ -211,7 +211,7 @@ const MoroccanTemplatesLanding = () => {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="flex justify-between items-center h-16 md:h-20">
             <a href="#" className="text-2xl font-bold bg-gradient-to-r from-amber-600 to-blue-600 bg-clip-text text-transparent">
-              ديجيتال المغرب
+            ديجيتال العيون
             </a>
 
             {/* Desktop Navigation */}
@@ -665,7 +665,7 @@ const MoroccanTemplatesLanding = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
             <div className="sm:col-span-2">
               <h3 className="text-xl sm:text-2xl font-bold mb-4 bg-gradient-to-r from-amber-400 to-blue-400 bg-clip-text text-transparent">
-                ديجيتال المغرب
+              ديجيتال العيون
               </h3>
               <p className="text-gray-400 mb-4 leading-relaxed text-sm sm:text-base">
                 مواقع احترافية مصممة خصيصا للأعمال المغربية. 
@@ -694,7 +694,7 @@ const MoroccanTemplatesLanding = () => {
           </div>
           
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm sm:text-base">
-            <p>&copy; 2025 ديجيتال المغرب. جميع الحقوق محفوظة. مصنوع بـ ❤️ في المغرب</p>
+            <p>&copy; 2023 ديجيتال العيون . جميع الحقوق محفوظة. مصنوع بـ ❤️ في العيون</p>
           </div>
         </div>
       </footer>
