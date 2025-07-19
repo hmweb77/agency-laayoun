@@ -462,7 +462,7 @@ const MoroccanTemplatesLanding = () => {
                       {template.category}
                     </span>
                   </div>
-                  <motion.div 
+                  {/* <motion.div 
                     className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: activeTemplate === template.id ? 1 : 0 }}
@@ -475,7 +475,7 @@ const MoroccanTemplatesLanding = () => {
                       </button>
                       </a>
                     </div>
-                  </motion.div>
+                  </motion.div> */}
                 </div>
                 
                 <div className="p-4 sm:p-6">
