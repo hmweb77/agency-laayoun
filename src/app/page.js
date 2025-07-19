@@ -634,7 +634,7 @@ const MoroccanTemplatesLanding = () => {
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-2">واتساب</h3>
                 <p className="text-gray-600 text-sm sm:text-base">سولنا مباشرة</p>
-                <p className="text-amber-600 font-semibold text-sm sm:text-base">+212660059899</p>
+                <p className="text-amber-600 font-semibold text-sm sm:text-base">+212708140617</p>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="p-4 sm:p-6">
@@ -643,7 +643,7 @@ const MoroccanTemplatesLanding = () => {
                 </div>
                 <h3 className="text-lg sm:text-xl font-semibold mb-2">إيميل</h3>
                 <p className="text-gray-600 text-sm sm:text-base">صيفط لينا رسالة</p>
-                <p className="text-amber-600 font-semibold text-sm sm:text-base">hmweb77@gmail.com</p>
+                <p className="text-amber-600 font-semibold text-sm sm:text-base">contact@hmwebs.com</p>
               </motion.div>
 
               <motion.div variants={fadeInUp} className="p-4 sm:p-6">
@@ -760,7 +760,7 @@ const MoroccanTemplatesLanding = () => {
                   required
                   disabled={isSubmitting}
                   className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm sm:text-base disabled:bg-gray-100 disabled:cursor-not-allowed"
-                  placeholder="+212 6XX XXX XXX"
+                  placeholder="+212708140617"
                 />
               </div>
 
